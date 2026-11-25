@@ -1,0 +1,7 @@
+# Produtos monitorados. Edite e adicione os seus.
+products:
+  - name: "Exemplo - troque pelo seu produto"
+    url: "https://www.exemplo.com.br/produto"
+    target_price: 1500.00     # avisa quando o preço ficar <= este valor (opcional)
+    drop_percent: 10          # avisa quando cair >= 10% vs. último preço visto (opcional)
+    # selector: "span.price"  # seletor CSS, só se a detecção automática falhar
