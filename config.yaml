@@ -1,0 +1,23 @@
+# Produtos monitorados (baseado no relatório Black Friday 2026, 25/11).
+# target_price = teto recomendado no Pix; drop_percent = avisa em queda brusca.
+products:
+  - name: "PS5 Digital 825GB + Astro Bot + GT7 (Amazon)"
+    url: "https://www.amazon.com.br/dp/B0FPGF9J2J"
+    target_price: 3900
+    drop_percent: 5
+  - name: "PS5 Digital 825GB + 2 jogos (Casas Bahia)"
+    url: "https://www.casasbahia.com.br/pack-console-playstation-5-edicao-digital-825gb-astro-bot-e-gran-turismo-7/p/1572582933"
+    target_price: 3851
+    drop_percent: 5
+  - name: "PS5 Digital 825GB + 2 jogos (KaBuM!)"
+    url: "https://www.kabum.com.br/produto/989702"
+    target_price: 4000
+    drop_percent: 5
+  - name: "PS5 1TB com leitor + 2 jogos (Amazon)"
+    url: "https://www.amazon.com.br/dp/B0F8R9NDXC"
+    target_price: 4500
+    drop_percent: 5
+  - name: "PS5 Pro 2TB (KaBuM!)"
+    url: "https://www.kabum.com.br/produto/636960"
+    target_price: 7000
+    drop_percent: 5
