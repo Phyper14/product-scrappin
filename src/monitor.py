@@ -8,6 +8,7 @@ Exit 0 sempre que ao menos um preço foi lido; 1 se TODAS as lojas falharam
 """
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -144,6 +145,7 @@ def main():
     except FileNotFoundError:
         state = {}
     alerts, ok = run(targets, state)
+    os.makedirs(os.path.dirname(a.state) or ".", exist_ok=True)
     json.dump(state, open(a.state, "w"), indent=1, ensure_ascii=False, sort_keys=True)
     if alerts:
         open(a.alerts, "w").write(render_alerts(alerts))
