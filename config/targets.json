@@ -2,14 +2,14 @@
   {
     "id": "ps5-digital-amazon",
     "name": "PS5 Digital + Astro Bot + GT7 (Amazon)",
-    "url": "https://www.amazon.com.br/dp/B0FPGF9J2J",
+    "url": "https://www.amazon.com.br/gp/aw/d/B0FPGF9J2J",
     "max_price": 3900,
     "drop_percent": 5
   },
   {
     "id": "ps5-leitor-amazon",
     "name": "PS5 1TB com leitor + 2 jogos (Amazon)",
-    "url": "https://www.amazon.com.br/dp/B0F8R9NDXC",
+    "url": "https://www.amazon.com.br/gp/aw/d/B0F8R9NDXC",
     "max_price": 4500,
     "drop_percent": 5
   },

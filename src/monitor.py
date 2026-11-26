@@ -15,6 +15,8 @@ import time
 import urllib.request
 from datetime import datetime, timezone
 
+MOBILE_UA = ("Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) "
+             "Chrome/124.0 Mobile Safari/537.36")
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
       "Chrome/124.0 Safari/537.36")
 MAX_BYTES = 3_000_000
@@ -65,6 +67,13 @@ def extract_price(html):
         v = to_float(m.group(1))
         if v:
             candidates.append(v)
+    # Amazon mobile: preço no JSON do buybox e preço com desconto Pix no rótulo de economia
+    for m in re.finditer(r'"priceAmount":\s*([\d.]+)', html):
+        candidates.append(float(m.group(1)))
+    for m in re.finditer(r'por cento de desconto"[^>]*>\s*R\$\s*([\d.,]+)', html):
+        v = to_float(m.group(1))
+        if v:
+            candidates.append(v)
     if not candidates:
         m = re.search(r'class="a-offscreen">\s*R\$\s*([\d.,]+)', html)
         if m and to_float(m.group(1)):
@@ -74,8 +83,10 @@ def extract_price(html):
 
 
 def fetch(url, timeout=25):
+    # Amazon desktop serve captcha a IPs de datacenter; a página mobile abre
+    ua = MOBILE_UA if "amazon." in url else UA
     req = urllib.request.Request(url, headers={
-        "User-Agent": UA, "Accept-Language": "pt-BR,pt;q=0.9",
+        "User-Agent": ua, "Accept-Language": "pt-BR,pt;q=0.9",
         "Accept": "text/html,application/xhtml+xml"})
     with urllib.request.urlopen(req, timeout=timeout) as r:  # nosec: URLs vêm do config versionado
         return r.read(MAX_BYTES).decode("utf-8", "replace")
