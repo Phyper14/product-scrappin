@@ -88,6 +88,11 @@ def decide(price, entry, max_price):
     return last_alerted is None or price < last_alerted
 
 
+def dropped(price, prev, pct):
+    """Queda brusca: preço atual >= pct% abaixo da leitura anterior (vale mesmo acima do teto)."""
+    return bool(pct) and prev is not None and price <= prev * (1 - pct / 100)
+
+
 def run(targets, state, fetcher=fetch, now=None):
     now = now or datetime.now(timezone.utc).isoformat(timespec="seconds")
     alerts, ok = [], 0
@@ -102,9 +107,14 @@ def run(targets, state, fetcher=fetch, now=None):
             print(f"[sem preço] {t['id']}", file=sys.stderr)
             continue
         ok += 1
+        reasons = []
         if decide(price, entry, t["max_price"]):
-            alerts.append((t, price))
+            reasons.append("abaixo do teto")
             entry["last_alert_price"] = price
+        if dropped(price, entry.get("last_price"), t.get("drop_percent")):
+            reasons.append(f"queda de {t['drop_percent']}%+")
+        if reasons:
+            alerts.append((t, price, " e ".join(reasons)))
         if price > t["max_price"]:
             entry.pop("last_alert_price", None)  # saiu da faixa: rearma o alerta
         entry["last_price"], entry["last_seen"] = price, now
@@ -117,8 +127,8 @@ def run(targets, state, fetcher=fetch, now=None):
 
 def render_alerts(alerts):
     lines = ["# 🔔 Preço abaixo do teto", ""]
-    for t, p in alerts:
-        lines.append(f"- **{t['name']}**: R$ {p:,.2f} (teto R$ {t['max_price']:,.2f}) — {t['url']}")
+    for t, p, why in alerts:
+        lines.append(f"- **{t['name']}**: R$ {p:,.2f} ({why}; teto R$ {t['max_price']:,.2f}) — {t['url']}")
     return "\n".join(lines) + "\n"
 
 

@@ -40,6 +40,27 @@ class Decide(unittest.TestCase):
         self.assertTrue(m.decide(3700, {"last_alert_price": 3800}, 3900))
 
 
+class Drop(unittest.TestCase):
+    def test_drop_above_cap_alerts(self):  # queda brusca avisa mesmo acima do teto
+        self.assertTrue(m.dropped(4500, 4800, 5))
+
+    def test_small_move_ignored(self):
+        self.assertFalse(m.dropped(4700, 4800, 5))
+
+    def test_first_reading_has_no_baseline(self):
+        self.assertFalse(m.dropped(4000, None, 5))
+
+    def test_disabled_without_percent(self):
+        self.assertFalse(m.dropped(1000, 4800, None))
+
+    def test_run_reports_drop_reason(self):
+        t = [{"id": "a", "name": "A", "url": "u", "max_price": 1000, "drop_percent": 5}]
+        st = {"a": {"history": [], "last_price": 4800.0}}
+        m.time.sleep = lambda s: None
+        al, _ = m.run(t, st, fetcher=lambda u: '<meta itemprop="price" content="4500">')
+        self.assertEqual(al[0][2], "queda de 5%+")
+
+
 class Run(unittest.TestCase):
     T = [{"id": "a", "name": "A", "url": "u", "max_price": 3900}]
 

@@ -1,7 +1,44 @@
 [
-  {"id": "ps5-digital-amazon", "name": "PS5 Digital + Astro Bot + GT7 (Amazon)", "url": "https://www.amazon.com.br/dp/B0FPGF9J2J", "max_price": 3900},
-  {"id": "ps5-leitor-amazon", "name": "PS5 1TB com leitor + 2 jogos (Amazon)", "url": "https://www.amazon.com.br/dp/B0F8R9NDXC", "max_price": 4500},
-  {"id": "ps5-digital-kabum", "name": "PS5 Digital + 2 jogos (KaBuM!)", "url": "https://www.kabum.com.br/produto/989702", "max_price": 3900},
-  {"id": "ps5-pro-kabum", "name": "PS5 Pro 2TB (KaBuM!)", "url": "https://www.kabum.com.br/produto/636960", "max_price": 7000},
-  {"id": "ps5-digital-ml-oficial", "name": "PS5 Digital (loja oficial PlayStation, ML)", "url": "https://www.mercadolivre.com.br/p/MLB54963150", "max_price": 3900}
+  {
+    "id": "ps5-digital-amazon",
+    "name": "PS5 Digital + Astro Bot + GT7 (Amazon)",
+    "url": "https://www.amazon.com.br/dp/B0FPGF9J2J",
+    "max_price": 3900,
+    "drop_percent": 5
+  },
+  {
+    "id": "ps5-leitor-amazon",
+    "name": "PS5 1TB com leitor + 2 jogos (Amazon)",
+    "url": "https://www.amazon.com.br/dp/B0F8R9NDXC",
+    "max_price": 4500,
+    "drop_percent": 5
+  },
+  {
+    "id": "ps5-digital-casasbahia",
+    "name": "PS5 Digital + 2 jogos (Casas Bahia, vendedor terceiro: conferir NF)",
+    "url": "https://www.casasbahia.com.br/pack-console-playstation-5-edicao-digital-825gb-astro-bot-e-gran-turismo-7/p/1572582933",
+    "max_price": 3851,
+    "drop_percent": 5
+  },
+  {
+    "id": "ps5-digital-kabum",
+    "name": "PS5 Digital + 2 jogos (KaBuM!)",
+    "url": "https://www.kabum.com.br/produto/989702",
+    "max_price": 3900,
+    "drop_percent": 5
+  },
+  {
+    "id": "ps5-pro-kabum",
+    "name": "PS5 Pro 2TB (KaBuM!)",
+    "url": "https://www.kabum.com.br/produto/636960",
+    "max_price": 7000,
+    "drop_percent": 5
+  },
+  {
+    "id": "ps5-digital-ml-oficial",
+    "name": "PS5 Digital (loja oficial PlayStation, ML)",
+    "url": "https://www.mercadolivre.com.br/p/MLB54963150",
+    "max_price": 3900,
+    "drop_percent": 5
+  }
 ]
