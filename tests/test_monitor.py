@@ -19,6 +19,11 @@ class Parse(unittest.TestCase):
     def test_amazon_markup(self):
         self.assertEqual(m.extract_price('<span class="a-offscreen">R$ 4.289,90</span>'), 4289.90)
 
+    def test_amazon_mobile_prefers_pix(self):  # menor entre preço normal e Pix
+        html = ('{"mobile_buybox_group_1":[{"displayPrice":"R$ 4.599,00","priceAmount":4599.00}]} '
+                '<span data-a="{priceToPay} com {savings} por cento de desconto" class="aok-offscreen"> R$ 4.369,04 </span>')
+        self.assertEqual(m.extract_price(html), 4369.04)
+
     def test_implausible_price_ignored(self):  # ex.: parcela de R$ 12 não é o preço
         self.assertIsNone(m.extract_price('<meta itemprop="price" content="12.00">'))
 

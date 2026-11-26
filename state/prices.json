@@ -1,0 +1,52 @@
+{
+ "ps5-digital-amazon": {
+  "history": [
+   {
+    "price": 4369.04,
+    "t": "2026-11-26T04:28:43+00:00"
+   }
+  ],
+  "last_price": 4369.04,
+  "last_seen": "2026-11-26T04:28:43+00:00",
+  "min_price": 4369.04
+ },
+ "ps5-digital-casasbahia": {
+  "history": []
+ },
+ "ps5-digital-kabum": {
+  "history": [
+   {
+    "price": 4369.05,
+    "t": "2026-11-26T04:06:06+00:00"
+   }
+  ],
+  "last_price": 4369.05,
+  "last_seen": "2026-11-26T04:28:43+00:00",
+  "min_price": 4369.05
+ },
+ "ps5-digital-ml-oficial": {
+  "history": []
+ },
+ "ps5-leitor-amazon": {
+  "history": [
+   {
+    "price": 4699.9,
+    "t": "2026-11-26T04:28:43+00:00"
+   }
+  ],
+  "last_price": 4699.9,
+  "last_seen": "2026-11-26T04:28:43+00:00",
+  "min_price": 4699.9
+ },
+ "ps5-pro-kabum": {
+  "history": [
+   {
+    "price": 7899.0,
+    "t": "2026-11-26T04:06:06+00:00"
+   }
+  ],
+  "last_price": 7899.0,
+  "last_seen": "2026-11-26T04:28:43+00:00",
+  "min_price": 7899.0
+ }
+}
