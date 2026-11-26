@@ -1,0 +1,40 @@
+name: price-monitor
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # GitHub pode atrasar; mínimo prático ~5 min
+  workflow_dispatch:
+concurrency:
+  group: price-monitor
+  cancel-in-progress: false
+permissions:
+  contents: write   # commit do state/prices.json
+  issues: write     # alerta via Issue
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -I -m unittest discover -s tests
+      - name: Monitor
+        run: python src/monitor.py
+      - name: Alert via Issue
+        if: hashFiles('alerts.md') != ''
+        env: {GH_TOKEN: "${{ github.token }}"}
+        run: gh issue create --title "Alerta de preço $(date -u +%F\ %H:%M) UTC" --body-file alerts.md
+      - name: Alert via Telegram (opcional)
+        if: hashFiles('alerts.md') != '' && env.TG_TOKEN != ''
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -fsS "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TG_CHAT}" --data-urlencode "text@alerts.md" >/dev/null
+      - name: Persist state
+        if: always()
+        run: |
+          git config user.name "price-bot"; git config user.email "price-bot@users.noreply.github.com"
+          git add state/prices.json
+          git diff --cached --quiet || (git commit -m "chore: atualiza preços" && git pull --rebase -q && git push)

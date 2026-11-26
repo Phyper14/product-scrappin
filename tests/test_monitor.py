@@ -1,0 +1,65 @@
+import sys, unittest
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+import monitor as m
+
+LD = '<script type="application/ld+json">{"@type":"Product","offers":{"@type":"Offer","price":"3.851,10"}}</script>'
+
+
+class Parse(unittest.TestCase):
+    def test_br_format(self):  # milhar com ponto não pode virar decimal
+        self.assertEqual(m.to_float("R$ 4.075,40"), 4075.40)
+
+    def test_jsonld(self):
+        self.assertEqual(m.extract_price(LD), 3851.10)
+
+    def test_meta(self):
+        self.assertEqual(m.extract_price('<meta property="product:price:amount" content="4184.07">'), 4184.07)
+
+    def test_amazon_markup(self):
+        self.assertEqual(m.extract_price('<span class="a-offscreen">R$ 4.289,90</span>'), 4289.90)
+
+    def test_implausible_price_ignored(self):  # ex.: parcela de R$ 12 não é o preço
+        self.assertIsNone(m.extract_price('<meta itemprop="price" content="12.00">'))
+
+    def test_no_price(self):
+        self.assertIsNone(m.extract_price("<html>captcha</html>"))
+
+
+class Decide(unittest.TestCase):
+    def test_above_cap_no_alert(self):
+        self.assertFalse(m.decide(4000, {}, 3900))
+
+    def test_first_below_cap_alerts(self):
+        self.assertTrue(m.decide(3900, {}, 3900))
+
+    def test_same_price_not_repeated(self):
+        self.assertFalse(m.decide(3800, {"last_alert_price": 3800}, 3900))
+
+    def test_new_low_alerts_again(self):
+        self.assertTrue(m.decide(3700, {"last_alert_price": 3800}, 3900))
+
+
+class Run(unittest.TestCase):
+    T = [{"id": "a", "name": "A", "url": "u", "max_price": 3900}]
+
+    def setUp(self):
+        m.time.sleep = lambda s: None
+
+    def test_alert_then_rearm(self):
+        st = {}
+        al, ok = m.run(self.T, st, fetcher=lambda u: LD, now="t1")
+        self.assertEqual((len(al), ok), (1, 1))
+        m.run(self.T, st, fetcher=lambda u: '<meta itemprop="price" content="4500">', now="t2")
+        self.assertNotIn("last_alert_price", st["a"])  # voltou acima: rearma
+        al, _ = m.run(self.T, st, fetcher=lambda u: LD, now="t3")
+        self.assertEqual(len(al), 1)
+
+    def test_fetch_failure_is_not_a_price(self):
+        def boom(u): raise OSError("403")
+        al, ok = m.run(self.T, {}, fetcher=boom)
+        self.assertEqual((al, ok), ([], 0))
+
+
+if __name__ == "__main__":
+    unittest.main()
